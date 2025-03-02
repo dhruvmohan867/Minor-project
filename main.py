@@ -6,46 +6,6 @@ from form_sections import *
 from backend import process_resume_data
 import base64
 
-if st.form_submit_button("✨ Generate AI Resume"):
-    with st.spinner("Generating your resume..."):
-        # Collect form data
-        form_data = {
-            "personal_info": {
-                "name": st.session_state.name,
-                "email": st.session_state.email,
-                "phone": st.session_state.phone
-            },
-            "education": {
-                "degree": st.session_state.education,
-                "years": st.session_state.education_years
-            },
-            "experience": {
-                "job_title": st.session_state.job_title,
-                "company": st.session_state.company,
-                "description": st.session_state.experience
-            },
-            "skills": [skill.strip() for skill in st.session_state.skills.split(',')],
-            "projects": st.session_state.projects
-        }
-
-        # Process data through backend
-        result = process_resume_data(form_data)
-        
-        if result['success']:
-            st.success("✅ Resume generated successfully!")
-            
-            # Show download button
-            with open(result['pdf_path'], "rb") as f:
-                pdf_bytes = f.read()
-            
-            st.download_button(
-                label="Download Resume",
-                data=pdf_bytes,
-                file_name=result['filename'],
-                mime="application/pdf"
-            )
-        else:
-            st.error(f"⚠️ Error: {result['error']}")
 def main():
     st.set_page_config(page_title="AI Resume Builder", page_icon="🤖", layout="wide")
     st.markdown(inject_custom_css(), unsafe_allow_html=True)
@@ -59,11 +19,50 @@ def main():
         skills_section()
         projects_section()
         
-        # Submit button
-        if st.form_submit_button("✨ Generate AI Resume"):
-            with st.spinner("Generating your resume..."):
-                time.sleep(2)
-                st.error("⚠️ Backend integration in progress! Our AI is working hard to finish this feature.")
+        # Submit button INSIDE the form
+        submitted = st.form_submit_button("✨ Generate AI Resume")
+    
+    # Handle submission OUTSIDE the form
+    if submitted:
+        with st.spinner("Generating your resume..."):
+            # Collect form data
+            form_data = {
+                "personal_info": {
+                    "name": st.session_state.name,
+                    "email": st.session_state.email,
+                    "phone": st.session_state.phone
+                },
+                "education": {
+                    "degree": st.session_state.education,
+                    "years": st.session_state.education_years
+                },
+                "experience": {
+                    "job_title": st.session_state.job_title,
+                    "company": st.session_state.company,
+                    "description": st.session_state.experience
+                },
+                "skills": [skill.strip() for skill in st.session_state.skills.split(',')],
+                "projects": st.session_state.projects
+            }
+
+            # Process data through backend
+            result = process_resume_data(form_data)
+            
+            if result['success']:
+                st.success("✅ Resume generated successfully!")
+                
+                # Show download button
+                with open(result['pdf_path'], "rb") as f:
+                    pdf_bytes = f.read()
+                
+                st.download_button(
+                    label="Download Resume",
+                    data=pdf_bytes,
+                    file_name=result['filename'],
+                    mime="application/pdf"
+                )
+            else:
+                st.error(f"⚠️ Error: {result['error']}")
     
     # Footer
     st.markdown("""
