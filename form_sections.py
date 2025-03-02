@@ -28,17 +28,23 @@ def work_experience_section():
             company = st.text_input("Company Name")
             experience = st.text_area("Job Description")
             st.markdown("</div>", unsafe_allow_html=True)
+            job_title = st.text_input("Job Title", key="job_title")
+            company = st.text_input("Company Name", key="company")
+            experience = st.text_area("Job Description", key="experience")
+
 
 def skills_section():
        with st.container():
             st.markdown("<div class='section'><h2>🛠 Skills</h2>", unsafe_allow_html=True)
             skills = st.text_area("List your skills (comma separated)")
             st.markdown("</div>", unsafe_allow_html=True)
+            skills = st.text_area("List your skills (comma separated)", key="skills")
+
 
 def projects_section():
        with st.container():
             st.markdown("<div class='section'><h2>🏆 Projects</h2>", unsafe_allow_html=True)
             projects = st.text_area("Describe your projects")
             st.markdown("</div>", unsafe_allow_html=True)
+            projects = st.text_area("Describe your projects", key="projects")
           
-# Create similar functions for work_experience_section(), skills_section(), projects_section()
