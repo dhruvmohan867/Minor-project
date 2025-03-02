@@ -6,7 +6,7 @@ import sqlite3
 from datetime import datetime
 from fpdf import FPDF
 from PyPDF2 import PdfReader
-
+import streamlit as st
 # Initialize database connection
 def init_db():
     conn = sqlite3.connect('resumes.db')
